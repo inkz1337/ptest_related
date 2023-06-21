@@ -1,5 +1,10 @@
 <#
-Lokalno ucitat skriptu double dotanjem nakon AMSI bypass-a.
+rubeus exe  loading
+
+1. . .\Rubeus_latest.ps1
+2.Invoke-rubpew
+3.pewpew
+
 #>
 
 
