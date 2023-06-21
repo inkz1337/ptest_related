@@ -1,4 +1,10 @@
-#PAZI ŠTA RADIŠ!
+<# Fast file encryptor concept;
+Checks smb shares withing cidr notation, lists items and specific extension if extension is matched it gets encrypted.
+Procedure for decrypt is automatic if .encrypted extension is present
+
+
+EXECUTE WITH CAUTION!
+#>
 
 
 
