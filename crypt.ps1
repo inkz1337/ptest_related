@@ -1,3 +1,7 @@
+#PAZI ŠTA RADIŠ!
+
+
+
 param (
     [Parameter(Mandatory = $true)]
     [string]$smbUsername,
