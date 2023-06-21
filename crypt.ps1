@@ -1,6 +1,6 @@
 <# Fast file encryptor concept;
-Checks smb shares withing cidr notation, lists items and specific extension if extension is matched it gets encrypted.
-Procedure for decrypt is automatic if .encrypted extension is present
+Checks smb shares within cidr notation, lists items and searches for specific file extensions, if extension is matched file gets encrypted.
+Procedure for decrypt is automatic if ".encrypted" extension is present
 
 
 EXECUTE WITH CAUTION!
