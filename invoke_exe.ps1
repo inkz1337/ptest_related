@@ -14,7 +14,7 @@ function Invoke-exe
             
             $parametersList = New-Object System.Collections.ArrayList
 
-            # Ask the user for switches until they enter an empty string
+            # Unosenje switcheva do praznog
             while ($true)
             {
                 $switches = Read-Host "Unesi switcheve koje zelis svaki parametar mora biti u zasebno redu(npr. Sharphound -c enter all enter kad si gotov u prazno, ili kod snafflera -s enter -o enter log.txt i onda na kraju enter u praznom redu kada si gotov)"
@@ -41,7 +41,7 @@ function Invoke-exe
                 }
                 else
                 {
-                    Write-Host "The loaded assembly does not have an entry point."
+                    Write-Host "Nije dobro procitao exe entry point"
                 }
             }
             catch
