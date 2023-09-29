@@ -266,3 +266,5 @@ $DLLBytes = [System.Convert]::FromBase64String($base64dll)
 $credentials = Get-SyncCredentials -AsBackgroundProcess $false
 return $credentials | Format-List
 
+Write-Verbose "Powershell tokeni ne stimaju resetiraj powershell nakon uzimanja pw-a"
+
