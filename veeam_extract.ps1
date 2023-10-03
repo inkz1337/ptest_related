@@ -1,45 +1,45 @@
-﻿Add-Type -assembly System.Security
+# Load the System.Security assembly for cryptographic operations
+Add-Type -Assembly System.Security
 
-# RegPaths
-$VeaamRegPath1 = "HKLM:\SOFTWARE\Veeam\Veeam Backup and Replication\" #Veeam 10,11
-$VeaamRegPath2 = "HKLM:\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\MsSql\" #Veeam BR 12
+# Registry Paths
+$VeaamRegPath1 = "HKLM:\SOFTWARE\Veeam\Veeam Backup and Replication\" # Veeam 10,11
+$VeaamRegPath2 = "HKLM:\SOFTWARE\Veeam\Veeam Backup and Replication\DatabaseConfigurations\MsSql\" # Veeam BR 12
 
 $SqlDatabaseName = $null
 $SqlInstanceName = $null
 $SqlServerName = $null
 
-
+# Function to get Veeam connection parameters
 function Get-VeeamConnectionParameters($regPath) {
     try {
         $registryKey = Get-ItemProperty -Path $regPath -ErrorAction Stop
         $SqlDatabaseName = $registryKey.SqlDatabaseName 
         $SqlInstanceName = $registryKey.SqlInstanceName
         $SqlServerName = $registryKey.SqlServerName
-        return $true
+        return $true, $SqlDatabaseName, $SqlInstanceName, $SqlServerName
     }
     catch {
-        return $false
+        return $false, $null, $null, $null
     }
 }
 
+# Check Veeam connection parameters using the first registry path
+$success, $SqlDatabaseName, $SqlInstanceName, $SqlServerName = Get-VeeamConnectionParameters -regPath $VeaamRegPath1
 
-if (Get-VeeamConnectionParameters -regPath $VeaamRegPath1) {
+# If the first registry path is missing, try the second one
+if (-not $success) {
+    $success, $SqlDatabaseName, $SqlInstanceName, $SqlServerName = Get-VeeamConnectionParameters -regPath $VeaamRegPath2
+}
+
+# Check if connection parameters were found
+if (-not $success) {
+    Write-Host "Unable to retrieve Veeam connection parameters. Make sure you are running as a local admin."
     
 }
-else {
-    
-    if (Get-VeeamConnectionParameters -regPath $VeaamRegPath2) {
-        
-    }
-    else {
-        Write-Host "Jesi li na Veeamu-u?!, pokreni kao lokalni admin"
-        exit -1
-    }
-}
 
-# Info
+# Display information about the Veeam connection
 Write-Host ""
-Write-Host "Nadjoh Veeam " + $SqlServerName + "\" + $SqlInstanceName + "@" + $SqlDatabaseName + ", spajam se...  "
+Write-Host "Found Veeam $($SqlServerName) \$($SqlInstanceName)@$($SqlDatabaseName), connecting..."
 
 #Konekcija
 $SQL = "SELECT [user_name] AS 'User name',[password] AS 'Password' FROM [$SqlDatabaseName].[dbo].[Credentials] "+
