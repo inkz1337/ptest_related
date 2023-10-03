@@ -1,4 +1,4 @@
-# Load the System.Security assembly for cryptographic operations
+# skripta za extract Veeam passworda
 Add-Type -Assembly System.Security
 
 # Registry Paths
@@ -9,7 +9,7 @@ $SqlDatabaseName = $null
 $SqlInstanceName = $null
 $SqlServerName = $null
 
-# Function to get Veeam connection parameters
+# Konekcijski parametri
 function Get-VeeamConnectionParameters($regPath) {
     try {
         $registryKey = Get-ItemProperty -Path $regPath -ErrorAction Stop
@@ -23,23 +23,23 @@ function Get-VeeamConnectionParameters($regPath) {
     }
 }
 
-# Check Veeam connection parameters using the first registry path
+# Provjeri da li ima stari Veeam
 $success, $SqlDatabaseName, $SqlInstanceName, $SqlServerName = Get-VeeamConnectionParameters -regPath $VeaamRegPath1
 
-# If the first registry path is missing, try the second one
+# Provjeri da li je novi Veeam u pitanju <12
 if (-not $success) {
     $success, $SqlDatabaseName, $SqlInstanceName, $SqlServerName = Get-VeeamConnectionParameters -regPath $VeaamRegPath2
 }
 
-# Check if connection parameters were found
+
 if (-not $success) {
-    Write-Host "Unable to retrieve Veeam connection parameters. Make sure you are running as a local admin."
+    Write-Host "Nemogu provjeriti konekcijske parametre, runas li kao Admin?"
     
 }
 
 # Display information about the Veeam connection
 Write-Host ""
-Write-Host "Found Veeam $($SqlServerName) \$($SqlInstanceName)@$($SqlDatabaseName), connecting..."
+Write-Host "Veeam pronajden $($SqlServerName) \$($SqlInstanceName)@$($SqlDatabaseName), spajanje..."
 
 #Konekcija
 $SQL = "SELECT [user_name] AS 'User name',[password] AS 'Password' FROM [$SqlDatabaseName].[dbo].[Credentials] "+
